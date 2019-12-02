@@ -1,2 +1,5 @@
+[all:vars]
+#ansible_user=ncedu
+
 [appnodes]
 # ansible_host=127.0.0.1
