@@ -3,3 +3,6 @@
 
 [appnodes]
 # ansible_host=127.0.0.1
+
+[frontnodes]
+# ansible_host=127.0.0.1

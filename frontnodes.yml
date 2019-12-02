@@ -1,0 +1,4 @@
+---
+- hosts: frontnodes
+  roles:
+    - mariadb

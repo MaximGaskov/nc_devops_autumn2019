@@ -1,0 +1,15 @@
+---
+- name: Remove annonymous users from MariaDB
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+  become: True
+
+- name: Remove test database from MariaDB
+  mysql_db: 
+    name: test 
+    state: absent
+  become: True
+
+
