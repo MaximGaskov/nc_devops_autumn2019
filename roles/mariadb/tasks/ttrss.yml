@@ -1,0 +1,16 @@
+---
+- name: Create a new database for TTRSS 
+  mysql_db:
+    name: ttrss
+    state: present
+  become: True
+
+- name: Create dtabase user for TTRSS
+  mysql_user:
+    name: ttrss
+    password: ttrss
+    host: '%'
+    priv: "ttrss.*:ALL"
+    state: present
+  become: True
+
