@@ -1,3 +1,2 @@
 ---
 # vars file for mariadb
-mysql_root_password: root
