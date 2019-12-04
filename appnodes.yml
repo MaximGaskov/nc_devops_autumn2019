@@ -2,3 +2,4 @@
 - hosts: appnodes
   roles:
     - docker
+    - ttrss 

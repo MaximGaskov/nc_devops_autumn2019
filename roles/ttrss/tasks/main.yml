@@ -1,0 +1,4 @@
+---
+# tasks file for ttrss
+- import_tasks: prerequisites.yml
+- import_tasks: launch.yml

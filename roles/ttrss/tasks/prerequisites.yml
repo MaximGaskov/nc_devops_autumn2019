@@ -1,0 +1,23 @@
+- name: Install EPEL repo
+  yum:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+    state: present
+  become: True
+
+- name: Import EPEL GPG key
+  rpm_key:
+    key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+    state: present
+  become: True
+
+- name: Install pip package
+  yum:
+    name: python-pip
+    update_cache: yes
+  become: True
+
+- name: Install prerequisites for docker_container module
+  pip:
+    name: docker-py
+  become: True     
+
