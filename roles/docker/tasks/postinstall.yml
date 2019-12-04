@@ -4,3 +4,8 @@
     groups: docker
     append: yes
   become: True
+
+#- user: name={{ansible_user}} groups=input
+- name: reset ssh connection to refresh user groups 
+  meta: reset_connection
+
