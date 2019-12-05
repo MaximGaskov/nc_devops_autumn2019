@@ -1,0 +1,5 @@
+---
+# vars file for nginx
+source_folder: ~/ansible/
+destin_folder: /etc/nginx/
+...

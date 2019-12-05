@@ -1,0 +1,8 @@
+---
+# tasks file for nginx
+- import_tasks: selinux.yml
+- import_tasks: install.yml
+- import_tasks: remove.yml
+- import_tasks: generate_conf.yml
+- import_tasks: enable.yml
+...

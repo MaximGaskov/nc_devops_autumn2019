@@ -1,0 +1,9 @@
+---
+- name: Generate conf file for nginx
+  template:
+    src: "{{ source_folder }}/load.conf"
+    dest: "{{ destin_folder }}/nginx.conf"
+    mode: 660
+  notify:
+    - Start nginx
+...

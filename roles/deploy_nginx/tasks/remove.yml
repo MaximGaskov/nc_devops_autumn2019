@@ -1,0 +1,11 @@
+---
+- name: list of files of directory /etc/nginx
+  shell: ls -1 {{ destin_folder }}
+  register: content
+
+- name: Remove files from directory /etc/nginx
+  file:
+    path: "{{ destin_folder }}/{{ item }}"
+    state: absent
+  with_items: "{{ content.stdout_lines }}"
+  ...
