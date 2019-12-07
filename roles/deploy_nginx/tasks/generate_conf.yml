@@ -1,7 +1,13 @@
 ---
 - name: Generate conf file for nginx
   template:
+
+    # if we'll decide to install proxy
+  #  src: "{{ source_folder }}/proxy.conf"
+
+    # if will be installed load balancer(default)
     src: "{{ source_folder }}/load.conf"
+
     dest: "{{ destin_folder }}/nginx.conf"
     mode: 660
   notify:
