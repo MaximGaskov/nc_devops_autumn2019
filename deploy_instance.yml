@@ -1,0 +1,72 @@
+---
+- name: Test
+  become: yes
+  hosts: openstack
+  gather_facts: no
+
+  tasks:
+
+    - name: Create internal network
+      os_network:
+        state: present
+        auth:
+          auth_url: http://controller:5000/v3
+          username: admin
+          password: mda33ncedu
+          project_name: admin
+          project_domain_name: Default
+          user_domain_name: Default
+        name: int_net
+        provider_network_type: vxlan
+        shared: yes
+
+    - name: Create a subnet for int_net
+      os_subnet:
+        state: present
+        auth:
+          auth_url: http://controller:5000/v3
+          username: admin
+          password: mda33ncedu
+          project_name: admin
+          project_domain_name: Default
+          user_domain_name: Default
+        network_name: int_net
+        name: int_subnet
+        cidr: 192.168.0.0/24
+        gateway_ip: 192.168.0.1
+        enable_dhcp: yes
+        allocation_pool_start: 192.168.0.100
+        allocation_pool_end: 192.168.0.200
+
+    - name: Gather facts about network int_net
+      os_networks_facts:
+        auth:
+          auth_url: http://controller:5000/v3
+          username: admin
+          password: mda33ncedu
+          project_name: admin
+          project_domain_name: Default
+          user_domain_name: Default
+        name: int_net
+
+    - name: Create nginx instance
+      os_server:
+        state: present
+        auth:
+          auth_url: http://controller:5000/v3
+          username: admin
+          password: mda33ncedu
+          project_name: admin
+          project_domain_name: Default
+          user_domain_name: Default
+        name: nginx_proxy_server
+        flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
+        image: cf1a422b-e398-451a-ab7a-5c23f2e201f8
+        security_groups:
+          - default
+          - secgroup01
+        key_name: centos_key
+        nics:
+          - net-id: d596bab6-7d17-4557-b2f8-8c4a4cfb637b
+          - net-name: int_net
+...
