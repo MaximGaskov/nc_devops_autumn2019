@@ -116,7 +116,7 @@
           - net-id: d596bab6-7d17-4557-b2f8-8c4a4cfb637b
           - net-name: int_net
 
-    - name: Create seafile instance
+    - name: Create server2 instance
       os_server:
         state: present
         auth:
@@ -126,7 +126,7 @@
           project_name: admin
           project_domain_name: Default
           user_domain_name: Default
-        name: seafile_server
+        name: server2
         flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
         image: cf1a422b-e398-451a-ab7a-5c23f2e201f8
         security_groups:
@@ -138,7 +138,7 @@
           - net-name: int_net
         auto_ip: no
 
-    - name: Cerate ttrss instance
+    - name: Cerate server1 instance
       os_server:
         state: present
         auth:
@@ -148,7 +148,7 @@
           project_name: admin
           project_domain_name: Default
           user_domain_name: Default
-        name: ttrss_server
+        name: server1
         flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
         image: cf1a422b-e398-451a-ab7a-5c23f2e201f8
         security_groups:
@@ -172,7 +172,7 @@
           user_domain_name: Default
         network: ext_net
         nat_destination: mgmt_net
-        server: ttrss_server
+        server: server1
 
     - name: Creating floating ip
       os_floating_ip:
@@ -186,6 +186,6 @@
           user_domain_name: Default
         network: ext_net
         nat_destination: mgmt_net
-        server: seafile_server
+        server: server2
 
 ...
