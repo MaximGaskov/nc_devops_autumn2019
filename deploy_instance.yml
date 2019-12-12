@@ -6,11 +6,6 @@
 
   tasks:
 
-  vars:
-    source_folder: ~/ansible/
-    destin_folder: /etc/nginx/
-    
-    
     - name: Create internal network
       os_network:
         state: present
@@ -95,7 +90,7 @@
         interfaces:
           - mgmt_subnet
 
-    - name: Create nginx instance
+    - name: Create front_server instance
       os_server:
         state: present
         auth:
@@ -105,7 +100,7 @@
           project_name: admin
           project_domain_name: Default
           user_domain_name: Default
-        name: nginx_proxy_server
+        name: front_server
         flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
         image: cf1a422b-e398-451a-ab7a-5c23f2e201f8
         security_groups:
