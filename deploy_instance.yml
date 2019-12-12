@@ -90,7 +90,8 @@
         interfaces:
           - mgmt_subnet
 
-    - name: Create front_server instance
+    - name: Create server1 instance
+      register: server1_vm
       os_server:
         state: present
         auth:
@@ -100,7 +101,7 @@
           project_name: admin
           project_domain_name: Default
           user_domain_name: Default
-        name: front_server
+        name: server1
         flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
         image: cf1a422b-e398-451a-ab7a-5c23f2e201f8
         security_groups:
@@ -110,8 +111,14 @@
         nics:
           - net-id: d596bab6-7d17-4557-b2f8-8c4a4cfb637b
           - net-name: int_net
+    
+    - name: Add server1 to group 'instances'
+      add_host:
+        name: "{{ server1_vm.openstack.addresses.ext_net[0].addr }}" 
+        groups: instances
 
     - name: Create server2 instance
+      register: server2_vm
       os_server:
         state: present
         auth:
@@ -133,7 +140,8 @@
           - net-name: int_net
         auto_ip: no
 
-    - name: Cerate server1 instance
+    - name: Cerate server3 instance
+      register: server3_vm
       os_server:
         state: present
         auth:
@@ -143,7 +151,7 @@
           project_name: admin
           project_domain_name: Default
           user_domain_name: Default
-        name: server1
+        name: server3
         flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
         image: cf1a422b-e398-451a-ab7a-5c23f2e201f8
         security_groups:
@@ -156,20 +164,7 @@
         auto_ip: no
 
     - name: Creating floating ip
-      os_floating_ip:
-        state: present
-        auth:
-          auth_url: http://controller:5000/v3
-          username: admin
-          password: mda33ncedu
-          project_name: admin
-          project_domain_name: Default
-          user_domain_name: Default
-        network: ext_net
-        nat_destination: mgmt_net
-        server: server1
-
-    - name: Creating floating ip
+      register: f_ip_2
       os_floating_ip:
         state: present
         auth:
@@ -182,5 +177,37 @@
         network: ext_net
         nat_destination: mgmt_net
         server: server2
+      
+    - name: Add server2 to group 'instances'
+      add_host:
+        name: "{{ f_ip_2.floating_ip.floating_ip_address }}" 
+        groups: instances
+
+    - name: Creating floating ip
+      register: f_ip_3
+      os_floating_ip:
+        state: present
+        auth:
+          auth_url: http://controller:5000/v3
+          username: admin
+          password: mda33ncedu
+          project_name: admin
+          project_domain_name: Default
+          user_domain_name: Default
+        network: ext_net
+        nat_destination: mgmt_net
+        server: server3
+
+    - name: Add server3 to group 'instances'
+      add_host:
+        name: "{{ f_ip_3.floating_ip.floating_ip_address }}" 
+        groups: instances
+
+    - name: Create inventory file for instances
+      become: no  
+      template:
+        src: ansible-hosts.j2
+        dest: inventory_instances
+      delegate_to: 127.0.0.1
 
 ...

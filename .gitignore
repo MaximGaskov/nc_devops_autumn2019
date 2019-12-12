@@ -1,4 +1,5 @@
 inv
 Vagrantfile
 .vagrant/
+inventory_instances
 

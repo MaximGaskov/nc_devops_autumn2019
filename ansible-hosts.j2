@@ -1,0 +1,5 @@
+
+[instances]
+{%   for entry in groups['instances'] %}
+server{{loop.index}} ansible_host={{ entry }} 
+{%   endfor %}
