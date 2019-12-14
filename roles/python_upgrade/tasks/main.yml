@@ -1,0 +1,38 @@
+---
+- name: Install required packages for python upgrade
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - gcc
+    - openssl-devel
+    - bzip2-devel 
+  become: True
+
+- name: Download and extract Python-2.7.16.tgz 
+  unarchive:
+    src: https://www.python.org/ftp/python/2.7.16/Python-2.7.16.tgz
+    dest: /usr/src/
+    remote_src: yes
+  become: True
+
+- name: Install Python-2.7.16(1)
+  command: /usr/src/Python-2.7.16/configure 
+  become: True
+
+- name: Install Python-2.7.16(2)
+  shell: cd /usr/src/Python-2.7.16 && {{ item }}
+  with_items:
+    - ./configure --enable-optimizations #может не сработать с флагом оптимизации
+    - make altinstall
+  become: True
+
+- name: Install pip(1)
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+
+- name: Install pip(2)
+  shell: python2.7 get-pip.py
+# добавить alias если не будет работать
+...
+
