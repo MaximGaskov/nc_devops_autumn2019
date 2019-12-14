@@ -1,0 +1,28 @@
+- name: Deploy applications 
+  hosts: instances
+#  gather_facts: False
+  tasks:
+  - name: Install EPEL repo
+    yum:
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+      state: present
+    become: True
+
+  - name: Import EPEL GPG key.
+    rpm_key:
+      key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+      state: present
+    become: True
+
+  - name: Update ca-certificates 
+    command: yum --disablerepo=epel -y update  ca-certificates
+    become: True
+
+  - name: Fix EPEL repo(1)
+    command: "sed -i 's/#//g' /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel-testing.repo"
+    become: True
+
+  - name: Fix EPEL repo(2)
+    command: "sed -i 's/metalink/#metalink/g' /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel-testing.repo"
+    become: True
+
