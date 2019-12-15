@@ -1,5 +1,5 @@
 ---
-- name: Test
+- name: Create openstack infrastructure
   become: yes
   hosts: openstack
   gather_facts: no
@@ -103,7 +103,7 @@
           user_domain_name: Default
         name: server1
         flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
-        image: cf1a422b-e398-451a-ab7a-5c23f2e201f8
+        image: 25a1df4c-dec7-4288-b036-bbf7df7b5c82
         security_groups:
           - default
           - secgroup01
@@ -130,7 +130,7 @@
           user_domain_name: Default
         name: server2
         flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
-        image: cf1a422b-e398-451a-ab7a-5c23f2e201f8
+        image: 25a1df4c-dec7-4288-b036-bbf7df7b5c82
         security_groups:
           - default
           - secgroup01
@@ -153,7 +153,7 @@
           user_domain_name: Default
         name: server3
         flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
-        image: cf1a422b-e398-451a-ab7a-5c23f2e201f8
+        image: 25a1df4c-dec7-4288-b036-bbf7df7b5c82
         security_groups:
           - default
           - secgroup01
