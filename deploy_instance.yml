@@ -112,10 +112,12 @@
           - net-id: d596bab6-7d17-4557-b2f8-8c4a4cfb637b
           - net-name: int_net
     
-    - name: Add server1 to group 'instances'
+    - name: Add server1 to groups 'instances' and 'front'
       add_host:
         name: "{{ server1_vm.openstack.addresses.ext_net[0].addr }}" 
-        groups: instances
+        groups: 
+        - instances
+        - front
 
     - name: Create server2 instance
       register: server2_vm
