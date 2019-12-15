@@ -1,0 +1,7 @@
+---
+# tasks file for epel
+- name: Install epel release
+  yum:
+    name: epel-release
+    update_cache: yes
+...
