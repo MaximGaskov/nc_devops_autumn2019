@@ -1,0 +1,28 @@
+---
+# tasks file for docker-swarm
+- name: Install pip
+  yum:
+    name: python2-pip
+  become: True
+
+- name: Install docker-py
+  pip:
+    name: docker-py
+  become: True    
+
+- name: Init swarm manager
+  docker_swarm:
+    state: present
+    advertise_addr: "{{ ansible_facts.eth1.ipv4.address }}"
+  register: manager
+  when: "'front' in group_names"
+
+- name: Join swarm
+  docker_swarm:
+    state: join
+    advertise_addr: "{{ ansible_facts.eth1.ipv4.address }}"
+    remote_addrs: "{{ hostvars.server1.ansible_facts.eth1.ipv4.address }}"
+    join_token: "{{ hostvars.server1.manager.swarm_facts.JoinTokens.Worker }}"
+  when: "'front' not in group_names"
+
+
