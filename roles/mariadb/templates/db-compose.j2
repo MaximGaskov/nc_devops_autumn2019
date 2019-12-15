@@ -1,0 +1,21 @@
+version: '3'
+services:
+
+  db:
+    image: linuxserver/mariadb 
+    environment:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_pass }}"
+      MYSQL_DATABASE: ttrss
+      MYSQL_USER: ttrss
+      MYSQL_PASSWORD: ttrss
+    volumes:
+      - db_vol:/config  
+    networks:
+      - nc-net
+
+volumes:
+  db_vol:
+
+networks:
+  nc-net:
+    driver: overlay
