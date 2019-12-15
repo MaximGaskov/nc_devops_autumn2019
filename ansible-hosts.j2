@@ -1,5 +1,8 @@
-
-[instances]
-{%   for entry in groups['instances'] %}
-server{{loop.index}} ansible_host={{ entry }} 
+{% for item in groups %}
+{% if (item != "all") and (item != "openstack") and (item != "ungrouped")%}
+[{{item}}]
+{%   for entry in groups[item] %}
+server{{loop.index}} ansible_host={{ entry }}
 {%   endfor %}
+{% endif %}
+{% endfor %}
