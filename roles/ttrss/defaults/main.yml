@@ -1,11 +1,2 @@
 ---
 # defaults file for ttrss
-ttrss_host_ip_addr: "172.16.0.4"
-ttrss_port: "9080"
-db_host_ip_addr: "172.17.0.1"
-db_port: "3306"
-db_ttrss_dbname: "ttrss"
-db_ttrss_user: "ttrss"
-db_ttrss_pass: "ttrss"
-db_type: "mysql"
-

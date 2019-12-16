@@ -1,0 +1,23 @@
+version: '3'
+services:
+
+  ttrss:
+    image: clue/ttrss
+    depends_on:
+      - db
+      - nginx
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_TYPE: mysql
+    restart: on-failure
+    deploy:
+      placement: 
+        constraints:
+          - node.labels.region == db_ttrss
+
+networks:
+  default:
+    external:
+      name: {{ docker_stack_name }}_nc-net
+

@@ -12,6 +12,8 @@ services:
       - db_vol:/config  
     networks:
       - nc-net
+    ports:
+      - "3306:3306"
     deploy:
       replicas: 1
       placement: 

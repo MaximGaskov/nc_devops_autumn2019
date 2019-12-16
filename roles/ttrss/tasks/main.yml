@@ -1,4 +1,30 @@
 ---
 # tasks file for ttrss
-- import_tasks: prerequisites.yml
-- import_tasks: launch.yml
+- name: Install mysql client
+  yum:
+    name: mysql
+    update_cache: yes
+
+- name: Template a ttrss-compose file 
+  template:
+    src: ttrss-compose.j2
+    dest: "/home/{{ ansible_user }}/compose/ttrss-compose.yml"
+
+- debug: var=hostvars.server2
+
+- name: Template a check-ttrss-db file
+  template:
+    src: check_ttrss_db.j2
+    dest: "/home/{{ ansible_user }}/check_ttrss_db.sh"
+    mode: u=rwx,g=x,o=x
+
+- name: Wait for database to initialize
+  shell: /home/{{ ansible_user }}/check_ttrss_db.sh
+
+- name: Deploy database sevice to docker swarm
+  docker_stack:
+    state: present
+    name: "{{ docker_stack_name }}" 
+    compose:
+      - "/home/{{ ansible_user }}/compose/ttrss-compose.yml"
+

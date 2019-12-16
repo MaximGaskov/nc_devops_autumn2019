@@ -1,0 +1,13 @@
+#!/bin/bash
+while true
+do
+   mysql -u ttrss -pttrss -h {{ hostvars.server2.ansible_host }} --port 3306 -e "use ttrss" 
+   if [ $? -ne 0 ]
+   then
+      echo "Waiting for tinyRSS db initialization..."
+      sleep 5
+   else
+      echo "TTRSS db is ready"
+      break
+   fi
+done

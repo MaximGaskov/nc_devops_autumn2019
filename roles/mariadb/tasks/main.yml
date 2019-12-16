@@ -6,7 +6,7 @@
     state: directory
   
 
-- name: Template a file to /etc/files.conf
+- name: Template a db-compose file 
   template:
     src: db-compose.j2
     dest: "/home/{{ ansible_user }}/compose/db-compose.yml"
