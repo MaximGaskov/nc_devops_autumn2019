@@ -12,6 +12,11 @@ services:
       - db_vol:/config  
     networks:
       - nc-net
+    deploy:
+      replicas: 1
+      placement: 
+        constraints:
+          - node.labels.region == db_ttrss
 
 volumes:
   db_vol:

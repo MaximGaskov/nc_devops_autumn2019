@@ -3,11 +3,12 @@
 - name: Install pip
   yum:
     name: python2-pip
+    update_cache: yes
   become: True
 
-- name: Install docker-py
+- name: Install python prerequisites 
   pip:
-    name: docker-py
+    name: [ docker, jsondiff ] 
   become: True    
 
 - name: Init swarm manager
@@ -17,12 +18,19 @@
   register: manager
   when: "'front' in group_names"
 
-- name: Join swarm
+- name: Join swarm db node
   docker_swarm:
     state: join
     advertise_addr: "{{ ansible_facts.eth1.ipv4.address }}"
     remote_addrs: "{{ hostvars.server1.ansible_facts.eth1.ipv4.address }}"
     join_token: "{{ hostvars.server1.manager.swarm_facts.JoinTokens.Worker }}"
+  register: worker
   when: "'front' not in group_names"
 
+- name: Add label to db_ttrss worker
+  docker_node:
+    hostname: "{{ hostvars.server2.ansible_nodename }}"
+    labels:
+      region: db_ttrss 
+  when: "'front' in group_names"
 
