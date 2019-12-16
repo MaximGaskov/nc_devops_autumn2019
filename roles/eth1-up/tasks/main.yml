@@ -1,0 +1,32 @@
+---
+# tasks file for docker
+
+- name: Config eth1
+  blockinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-eth1
+    create: yes
+    block: "
+    BOOTPROTO=dhcp\ns
+    DEVICE=eth1\n
+    HWADDR={{ hostvars[inventory_hostname]['ansible_eth1']['macaddress']}}\n
+    ONBOOT=yes\n
+    TYPE=Ethernet\n
+    USERCTL=no\n
+    DNS1=8.8.8.8\n
+    DNS2=8.8.4.4\n"
+- name: Add default gateway
+  lineinfile:
+    path: /etc/sysconfig/network
+    regexp: 'GATEWAY='
+    line: 'GATEWAY={{ default_gateways[inventory_hostname] }}'
+
+- name: Reload network service
+  systemd:
+    state: restarted
+    name: network.service  
+...
+
+
+
+
+
