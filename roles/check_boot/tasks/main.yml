@@ -1,0 +1,27 @@
+---
+# tasks file for check_boot
+- name: Wait for ssh
+  wait_for:
+    host: "{{ ansible_host }}"
+    port: 22
+    delay: 10
+    timeout: 300
+    search_regex: OpenSSH
+  delegate_to: localhost
+  become: no
+
+- name: ping host
+  ping:
+  become: yes
+  
+- name: Cloud-init finished
+  stat:
+    path: /var/lib/cloud/instance/boot-finished
+  register: cloud_init
+  become: yes
+  until: cloud_init.stat.exists 
+  retries: 60
+  delay: 5 
+
+- name: Gather facts
+  setup:
