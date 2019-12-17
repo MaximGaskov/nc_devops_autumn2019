@@ -21,7 +21,7 @@
 - name: Wait for database to initialize
   shell: /home/{{ ansible_user }}/check_ttrss_db.sh
 
-- name: Deploy database sevice to docker swarm
+- name: Deploy ttrss sevice to docker swarm
   docker_stack:
     state: present
     name: "{{ docker_stack_name }}" 
