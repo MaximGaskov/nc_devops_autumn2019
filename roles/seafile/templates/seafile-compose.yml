@@ -1,0 +1,35 @@
+version: '3'
+services:
+
+  seafile:
+    image: seafileltd/seafile-mc:latest
+    depends_on:
+      - db
+      - memcached
+      - nginx
+    environment:
+      DB_HOST: db
+      DB_ROOT_PASSWD: db_dev  
+      SEAFILE_ADMIN_EMAIL: me@example.com 
+      SEAFILE_ADMIN_PASSWORD: asecret     
+      SEAFILE_SERVER_LETSENCRYPT: "no"   
+    volumes:
+      - sea_vol:/shared 
+    deploy:
+      placement: 
+        constraints:
+          - node.labels.region == seafile
+
+
+  memcached:
+    image: memcached:1.5.6
+    container_name: seafile-memcached
+    entrypoint: memcached -m 256
+
+volumes:
+  sea_vol:
+          
+networks:
+  default:
+    external:
+      name: {{ docker_stack_name }}_nc-net

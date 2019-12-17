@@ -27,10 +27,16 @@
   register: worker
   when: "'front' not in group_names"
 
-- name: Add label to db_ttrss worker
+- name: Add label 'db_ttrss' to database instance
   docker_node:
     hostname: "{{ hostvars.server2.ansible_nodename }}"
     labels:
       region: db_ttrss 
   when: "'front' in group_names"
 
+- name: Add label 'seafile' to seafile instance
+  docker_node:
+    hostname: "{{ hostvars.server3.ansible_nodename }}"
+    labels:
+      region: seafile
+  when: "'front' in group_names"

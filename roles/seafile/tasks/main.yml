@@ -1,0 +1,14 @@
+---
+# tasks file for seafile
+
+- name: Template a seafile-compose file 
+  template:
+    src: ttrss-compose.j2
+    dest: "/home/{{ ansible_user }}/compose/seafile-compose.yml"
+
+- name: Deploy seafile sevice to docker swarm
+  docker_stack:
+    state: present
+    name: "{{ docker_stack_name }}" 
+    compose:
+      - "/home/{{ ansible_user }}/compose/seafile-compose.yml"
