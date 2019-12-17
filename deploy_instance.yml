@@ -48,7 +48,7 @@
         network_name: int_net
         name: int_subnet
         cidr: 192.168.0.0/24
-        gateway_ip: 192.168.0.1
+        no_gateway_ip: yes
         enable_dhcp: yes
         allocation_pool_start: 192.168.0.100
         allocation_pool_end: 192.168.0.200
@@ -90,6 +90,24 @@
         interfaces:
           - mgmt_subnet
 
+    - name: Create Volumes
+      os_volume:
+        state: present
+        auth:
+          auth_url: http://controller:5000/v3
+          username: admin
+          password: mda33ncedu
+          project_name: admin
+          project_domain_name: Default
+          user_domain_name: Default
+        size: 8
+        display_name: "{{ item.name }}"
+        display_description: Volume for production instances (Do not delete!)
+      loop:
+        - { name: 'volume_instance_1'}
+        - { name: 'volume_instance_2'}
+        - { name: 'volume_instance_3'}
+
     - name: Create server1 instance
       register: server1_vm
       os_server:
@@ -102,15 +120,17 @@
           project_domain_name: Default
           user_domain_name: Default
         name: server1
-        flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
-        image: 25a1df4c-dec7-4288-b036-bbf7df7b5c82
+        flavor: default
+        image: centos
         security_groups:
           - default
           - secgroup01
         key_name: centos_key
         nics:
-          - net-id: d596bab6-7d17-4557-b2f8-8c4a4cfb637b
+          - net-name: ext_net
           - net-name: int_net
+        volumes:
+          - volume_instance_1
     
     - name: Add server1 to groups 'instances' and 'front'
       add_host:
@@ -131,8 +151,8 @@
           project_domain_name: Default
           user_domain_name: Default
         name: server2
-        flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
-        image: 25a1df4c-dec7-4288-b036-bbf7df7b5c82
+        flavor: default
+        image: centos
         security_groups:
           - default
           - secgroup01
@@ -141,6 +161,8 @@
           - net-name: mgmt_net
           - net-name: int_net
         auto_ip: no
+        volumes:
+          - volume_instance_2
 
     - name: Cerate server3 instance
       register: server3_vm
@@ -154,8 +176,8 @@
           project_domain_name: Default
           user_domain_name: Default
         name: server3
-        flavor: b9befdb5-84fb-45f4-ac79-6e51ff1d8da2
-        image: 25a1df4c-dec7-4288-b036-bbf7df7b5c82
+        flavor: default
+        image: centos
         security_groups:
           - default
           - secgroup01
@@ -164,6 +186,8 @@
           - net-name: mgmt_net
           - net-name: int_net
         auto_ip: no
+        volumes:
+          - volume_instance_3
 
     - name: Creating floating ip
       register: f_ip_2
