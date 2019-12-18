@@ -10,8 +10,6 @@
     src: ttrss-compose.j2
     dest: "/home/{{ ansible_user }}/compose/ttrss-compose.yml"
 
-- debug: var=hostvars.server2
-
 - name: Template a check-ttrss-db file
   template:
     src: check_ttrss_db.j2

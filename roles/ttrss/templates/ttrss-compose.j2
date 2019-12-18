@@ -3,9 +3,6 @@ services:
 
   ttrss:
     image: clue/ttrss
-    depends_on:
-      - db
-      - nginx
     environment:
       DB_HOST: db
       DB_PORT: 3306
