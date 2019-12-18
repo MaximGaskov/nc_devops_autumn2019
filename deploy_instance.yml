@@ -134,7 +134,8 @@
     
     - name: Add server1 to groups 'instances' and 'front'
       add_host:
-        name: "{{ server1_vm.openstack.addresses.ext_net[0].addr }}" 
+        hostname: server1 
+        ansible_host: "{{ server1_vm.openstack.addresses.ext_net[0].addr }}" 
         groups: 
         - instances
         - front
@@ -206,7 +207,8 @@
       
     - name: Add server2 to group 'instances'
       add_host:
-        name: "{{ f_ip_2.floating_ip.floating_ip_address }}" 
+        hostname: server2
+        ansible_host: "{{ f_ip_2.floating_ip.floating_ip_address }}" 
         groups: instances
 
     - name: Creating floating ip
@@ -226,14 +228,40 @@
 
     - name: Add server3 to group 'instances'
       add_host:
-        name: "{{ f_ip_3.floating_ip.floating_ip_address }}" 
+        hostname: server3 
+        ansible_host: "{{ f_ip_3.floating_ip.floating_ip_address }}" 
         groups: instances
 
-    - name: Create inventory file for instances
-      become: no  
-      template:
-        src: ansible-hosts.j2
-        dest: inventory_instances
-      delegate_to: 127.0.0.1
+- hosts: instances
+  gather_facts: no
+  roles:
+    - check_boot
+    - eth1-up
+  vars:
+    default_gateways:
+      server1: "172.16.15.1"
+      server2: "192.168.100.1"
+      server3: "192.168.100.1"
+  become: True
+
+
+- name: Deploy applications 
+  hosts: instances
+  roles:
+    - epel
+    - docker
+    - docker-swarm
+  become: True
+
+- name: Deploy services
+  hosts: front
+  gather_facts: no
+  roles:
+    - mariadb
+    - ttrss
+    - seafile
+    - nginx
+    - dns_record
+  become: True
 
 ...
