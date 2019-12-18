@@ -1,0 +1,19 @@
+version: '3'
+services:
+
+  nginx:
+    image: nginx_proxy
+    container_name: nginx
+    ports:
+        - 80:80
+    deploy:
+      placement: 
+        constraints:
+          - node.role == manager
+
+networks:
+  default:
+    external:
+      name: {{ docker_stack_name }}_nc-net
+
+

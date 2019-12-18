@@ -1,0 +1,36 @@
+---
+# tasks file for nginx
+- name: Template a nginx-compose file 
+  template:
+    src: nginx-compose.j2
+    dest: "/home/{{ ansible_user }}/compose/nginx-compose.yml"
+
+- name: "Create /home/{{ ansible_user }}/build dir if not exists"
+  file: 
+    path: "/home/{{ ansible_user }}/build"
+    state: directory
+
+- name: Template a nginx.conf file 
+  template:
+    src: nginx.j2
+    dest: "/home/{{ ansible_user }}/build/nginx.conf"
+
+- name: Copy a Dockerfile
+  copy:
+    src: Dockerfile
+    dest: "/home/{{ ansible_user }}/build/Dockerfile"
+
+- name: Build an image nginx_proxy 
+  docker_image:
+    build:
+      path: "/home/{{ ansible_user }}/build"
+    name: nginx_proxy 
+    source: build
+
+- name: Deploy nginx sevice to docker swarm
+  docker_stack:
+    state: present
+    name: "{{ docker_stack_name }}" 
+    compose:
+      - "/home/{{ ansible_user }}/compose/nginx-compose.yml"
+
