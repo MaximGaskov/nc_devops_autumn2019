@@ -1,0 +1,19 @@
+---
+# tasks file for dns_record
+
+#- name: "Check if /etc/hosts contains dns mapping for services'{{ hostvars.server1.ansible_facts.eth1.ipv4.address }}  nc.ttrss.demo nc.seafile.demo"
+#  lineinfile:
+#    name: /etc/hosts 
+#    line: "{{ hostvars.server1.ansible_facts.eth1.ipv4.address }}"
+#    state: present
+#  check_mode: yes
+#  register: conf
+
+- name: Add a line to a file if the file does not exist, without passing regexp
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ hostvars.server1.ansible_facts.default_ipv4.address }} nc.ttrss.demo nc.seafile.demo"
+    create: yes
+  delegate_to: localhost
+  vars:
+    ansible_sudo_pass: "{{ my_sudo_pass }}"
