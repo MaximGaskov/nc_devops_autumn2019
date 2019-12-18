@@ -12,8 +12,12 @@
 
 - name: ping host
   ping:
+  retries: 3
+  delay: 3
   become: yes
-  
+
+- meta: clear_host_errors  
+
 - name: Cloud-init finished
   stat:
     path: /var/lib/cloud/instance/boot-finished
