@@ -1,9 +1,12 @@
 ---
 ansible_user: centos
 ansible_ssh_private_key_file: .ssh/id_rsa_instance 
-ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
+ansible_ssh_extra_args: '-o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPersist=30m -o ConnectionAttempts=100 -o UserKnownHostsFile=/dev/null  -o KbdInteractiveAuthentication=no -o PasswordAuthentication=no'
+ansible_ssh_pass: ItIsACrunch
 
 
 mysql_root_pass: root
 docker_stack_name: nc-demo
+
+my_sudo_pass: #пароль текущего пользователя
 ...
