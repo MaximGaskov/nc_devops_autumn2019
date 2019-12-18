@@ -1,6 +1,0 @@
----
-- hosts: frontnodes
-  roles:
-    - mariadb
-    - deploy_nginx
-...
